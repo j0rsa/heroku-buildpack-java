@@ -111,7 +111,7 @@ install_sops() {
   ar x /tmp/sops_3.0.4_amd64.deb data.tar.gz
   tar xvzf data.tar.gz ./usr/local/bin/sops --strip-components 4
   mkdir -p ~/.gnupg
-  if [ -z $GPG_KEY ]; then
+  if [ -z "$GPG_KEY" ]; then
       error "No GPG key was found in env variable!"
   fi
   echo ${GPG_KEY} > /tmp/priv.key
