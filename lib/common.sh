@@ -115,6 +115,7 @@ install_sops() {
       error "No GPG key was found in env variable!"
   fi
   echo "-----BEGIN PGP PRIVATE KEY BLOCK-----" > priv.key
+  echo " " >> priv.key
   echo ${GPG_KEY} >> priv.key
   echo "-----END PGP PRIVATE KEY BLOCK-----" >> priv.key
   cat priv.key
