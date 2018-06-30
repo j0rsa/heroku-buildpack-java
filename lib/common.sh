@@ -124,16 +124,21 @@ install_sops() {
 
 decrypt_sops_files() {
     #Get custom prefixes or set default value
-    local file_prefixes=${SOPS_FILE_PREFIXES:-enc.yaml|enc.yml|enc.json}
-    files=$(find . -regextype posix-egrep -regex ".*\.(${file_prefixes})$" -type f)
+    local file_extensions=${SOPS_FILE_EXTENSIONS:-enc.yaml|enc.yml|enc.json}
+    local decrypt_root=${1}
+
+    files=$(find ${decrypt_root} -regextype posix-egrep -regex ".*\.(${file_extensions})$" -type f)
+    echo "Searching for files with extension: ${file_extensions}"
     for file in ${files}; do
+        echo "Found file ${file}"
         directory=$(dirname ${file})
         filename=$(basename ${file})
         extension="${filename#*.}"
         filename="${filename%.*.*}"
         new_extension="${extension##*.}"
         new_file="${directory}/${filename}.${new_extension}"
-        echo "will generate file: "
+        echo "Decrypting..."
         ./sops -d ${file} > ${new_file}
+        echo "Saved in ${new_file}"
     done
 }
