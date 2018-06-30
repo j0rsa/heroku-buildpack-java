@@ -104,3 +104,31 @@ install_jdk() {
   install_java_with_overlay ${install_dir}
   mtime "jvm.install.time" "${start}"
 }
+
+install_sops() {
+  # For using sops @ref https://github.com/mozilla/sops
+  wget -P /tmp/ https://github.com/mozilla/sops/releases/download/3.0.5/sops_3.0.4_amd64.deb
+  dpkg -i /tmp/sops_3.0.4_amd64.deb
+  mkdir -p ~/.gnupg
+  if [ -z $GPG_KEY ]; then
+      error "No GPG key was found in env variable!"
+  fi
+  echo ${GPG_KEY} > /tmp/priv.key
+  gpg --allow-secret-key-import --import /tmp/priv.key
+}
+
+decrypt_sops_files() {
+    #Get custom prefixes or set default value
+    local file_prefixes=${SOPS_FILE_PREFIXES:-enc.yaml|enc.yml|enc.json}
+    files=$(find . -regextype posix-egrep -regex ".*\.(${file_prefixes})$" -type f)
+    for file in ${files}; do
+        directory=$(dirname ${file})
+        filename=$(basename ${file})
+        extension="${filename#*.}"
+        filename="${filename%.*.*}"
+        new_extension="${extension##*.}"
+        new_file="${directory}/${filename}.${new_extension}"
+        echo "will generate file: "
+        sops -d ${file} > ${new_file}
+    done
+}

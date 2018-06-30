@@ -18,10 +18,12 @@ source <(curl -s --retry 3 -L $BUILDPACK_STDLIB_URL)
 export_env $ENV_DIR "." "JAVA_OPTS|JAVA_TOOL_OPTIONS"
 
 install_jdk ${BUILD_DIR}
+install_sops
 
 [ -n "$(find ${BUILD_DIR} -type f -name "*.kt")" ] && mcount "kotlin.source"
 [ -n "$(find ${BUILD_DIR} -type f -name "*.groovy")" ] && mcount "groovy.source"
 
+decrypt_sops_files ${BUILD_DIR}
 run_mvn "compile" $BUILD_DIR $CACHE_DIR
 
 if has_maven_wrapper $BUILD_DIR; then
