@@ -108,7 +108,7 @@ install_jdk() {
 install_sops() {
   # For using sops @ref https://github.com/mozilla/sops
   wget -P /tmp/ https://github.com/mozilla/sops/releases/download/3.0.5/sops_3.0.4_amd64.deb
-  dpkg -i /tmp/sops_3.0.4_amd64.deb
+  sudo dpkg -i /tmp/sops_3.0.4_amd64.deb
   mkdir -p ~/.gnupg
   if [ -z $GPG_KEY ]; then
       error "No GPG key was found in env variable!"
