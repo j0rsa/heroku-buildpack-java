@@ -118,7 +118,6 @@ install_sops() {
   echo " " >> priv.key
   echo ${GPG_KEY} >> priv.key
   echo "-----END PGP PRIVATE KEY BLOCK-----" >> priv.key
-  cat priv.key
   gpg --allow-secret-key-import --import priv.key
 }
 
