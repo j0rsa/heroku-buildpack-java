@@ -81,6 +81,26 @@ $ heroku config:set MAVEN_JAVA_OPTS="-Xss2g"
 
 Other options are available for [defining a custom `settings.xml` file](https://devcenter.heroku.com/articles/using-a-custom-maven-settings-xml).
 
+# SOPS
+
+Everything you should know about SOPS project, you can find [here](https://github.com/mozilla/sops).
+
+Sops extension allows you to decrypt sensitive files in your project
+
+To do that, you should put your of your CI GPG key without headers and footers to `GPG_KEY` environment variable 
+
+## Customize Sops
+
+By default, extension is searching recursively all files in the project directory, with extensions `enc.yaml`, `enc.yml`, `enc.json` and ties to decrypt them with GPG private key
+
+If you want to change the extension set of files to search for, set environment variable `SOPS_FILE_EXTENSIONS`. 
+
+Default: `enc.yaml|enc.yml|enc.json`
+
+The current version of sops is `3.0.4_amd64`. If you want to use different one, provide release url into environment variable `SOPS_RELEASE_URL`.
+
+Default: `https://github.com/mozilla/sops/releases/download/3.0.5/sops_3.0.4_amd64.deb`
+
 ## Development
 
 To make changes to this buildpack, fork it on Github. Push up changes to your fork, then create a new Heroku app to test it, or configure an existing app to use your buildpack:
