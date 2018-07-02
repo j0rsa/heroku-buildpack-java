@@ -108,7 +108,7 @@ install_jdk() {
 install_sops() {
   # For using sops @ref https://github.com/mozilla/sops
   local sops_url=${SOPS_RELEASE_URL:-https://github.com/mozilla/sops/releases/download/3.0.5/sops_3.0.4_amd64.deb}
-  local sops_deb = ${sops_url##*/}
+  local sops_deb="${sops_url##*/}"
   wget -P /tmp/ ${sops_url}
   ar x /tmp/${sops_deb} data.tar.gz
   tar xvzf data.tar.gz ./usr/local/bin/sops --strip-components 4
